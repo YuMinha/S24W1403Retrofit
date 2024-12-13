@@ -4,7 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.Animatable
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -30,10 +33,13 @@ import androidx.compose.ui.Modifier
 import kr.ac.kumoh.ce.s20220703.s24w1403retrofit.ui.theme.S24W1403RetrofitTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
@@ -77,7 +83,12 @@ fun SongList(list: List<Song>, modifier: Modifier) {
 
 @Composable
 fun SongItem(song: Song) {
+    var (expanded, setExpanded) = remember { mutableStateOf(false) }
     Card(
+        modifier = Modifier
+            .clickable {
+                setExpanded(!expanded)
+            },
         elevation =  CardDefaults.cardElevation(8.dp),
     ){
         Row(
@@ -105,6 +116,17 @@ fun SongItem(song: Song) {
             ) {
                 TextTitle(song.title)
                 TextSinger(song.singer)
+            }
+        }
+        AnimatedVisibility(
+            visible = expanded,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            song.lyrics?.let {
+                Text(
+                    it.replace("\\n", "\n"),
+                    textAlign = TextAlign.Center,
+                )
             }
         }
     }
