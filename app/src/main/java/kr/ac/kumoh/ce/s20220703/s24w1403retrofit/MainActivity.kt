@@ -21,6 +21,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -63,8 +65,8 @@ fun MainScreen(viewModel: SongViewModel = viewModel()) {
 @Composable
 fun SongList(list: List<Song>, modifier: Modifier) {
     LazyColumn(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(horizontal = 8.dp)
     ) {
         items(list) { song ->
@@ -75,33 +77,38 @@ fun SongList(list: List<Song>, modifier: Modifier) {
 
 @Composable
 fun SongItem(song: Song) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(IntrinsicSize.Min)
-            .background(Color(255, 210, 210))
-            .padding(8.dp)
-    ) {
-        AsyncImage(
-            model = "https://picsum.photos/300/300?random=${song.singer}",
-            contentDescription = "가수 이미지 ${song.singer}",
-            contentScale = ContentScale.Crop,
+    Card(
+        elevation =  CardDefaults.cardElevation(8.dp),
+    ){
+        Row(
             modifier = Modifier
-                .size(100.dp)
-                //.clip(CircleShape),
-                .clip(RoundedCornerShape(percent = 10)),
-        )
-        Spacer(modifier = Modifier.width(10.dp))
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                //.background(Color(0, 210, 210)),
-            ,verticalArrangement = Arrangement.Center
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min)
+                .background(Color(255, 210, 210))
+                .padding(8.dp)
         ) {
-            TextTitle(song.title)
-            TextSinger(song.singer)
+            AsyncImage(
+                model = "https://picsum.photos/300/300?random=${song.singer}",
+                contentDescription = "가수 이미지 ${song.singer}",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(100.dp)
+                    //.clip(CircleShape),
+                    .clip(RoundedCornerShape(percent = 10)),
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                //.background(Color(0, 210, 210)),
+                ,verticalArrangement = Arrangement.SpaceAround
+            ) {
+                TextTitle(song.title)
+                TextSinger(song.singer)
+            }
         }
     }
+
 }
 
 @Composable
